@@ -1,0 +1,48 @@
+a=0.8;
+b=0.25;
+r=0.04;
+l0=0.5;
+p0=10^4;
+gamma=1.4;
+F=25;
+f=@(x)F*a*cos(x)-pi*r^2*(l0/(l0-b*tan(x)))^gamma*p0*b;
+df=@(x)-F*a*sin(x)-pi*r^2*(l0/(l0-b*tan(x)))^gamma*p0*b*(b/(cos(x)^2*(l0-b*tan(x))));
+[alpha1,t1] = alpha_compare(f,df,0.5,0,2e-15);
+%alpha1=rad2deg(alpha1);
+distance1a=abs(alpha1(1)-alpha1(3));
+distance1b=abs(alpha1(2)-alpha1(3));
+distance1c=abs(alpha1(4)-alpha1(3));
+fprintf("distance1 (fzero and bisection):%f\n",distance1a);
+fprintf("distance1 (newton and bisection):%f\n",distance1b);
+fprintf("distance1 (secant and bisection):%f\n",distance1c);
+
+f=@(x)F*a*cos(x)-pi*r^2*(l0/(l0-b*tan(x)))^gamma*p0*b+pi*r^2*1.01325*10^5*b;
+df=@(x)-F*a*sin(x)-pi*r^2*(l0/(l0-b*tan(x)))^gamma*p0*b*(b/(cos(x)^2*(l0-b*tan(x))));
+[alpha2,t2] = alpha_compare(f,df,1.06,1,2e-15);
+%alpha2=rad2deg(alpha2);
+distance2a=abs(alpha2(1)-alpha2(3));
+distance2b=abs(alpha2(2)-alpha2(3));
+distance2c=abs(alpha2(4)-alpha2(3));
+fprintf("distance2 (fzero and bisection):%f\n",distance2a);
+fprintf("distance2 (newton and bisection):%f\n",distance2b);
+fprintf("distance2 (secant and bisection):%f\n",distance2c);
+
+const=l0/b*(1-(pi*r^2*p0*b/(F*a))^(1/gamma));
+[alpha3,t3] = atan_compare(const,0.5,2e-15);
+%alpha3=rad2deg(alpha3);
+distance3a=abs(alpha3(1)-alpha3(3));
+distance3b=abs(alpha3(2)-alpha3(3));
+distance3c=abs(alpha3(4)-alpha3(3));
+fprintf("distance3 (fzero and bisection):%f\n",distance3a);
+fprintf("distance3 (newton and bisection):%f\n",distance3b);
+fprintf("distance3 (secant and bisection):%f\n",distance3c);
+
+const=l0/b*(1-(pi*r^2*p0*b/(F*a+pi*r^2*1.01325*10^5*b))^(1/gamma));
+[alpha4,t4] = atan_compare(const,1,2e-15);
+%alpha4=rad2deg(alpha4);
+distance4a=abs(alpha4(1)-alpha4(3));
+distance4b=abs(alpha4(2)-alpha4(3));
+distance4c=abs(alpha4(4)-alpha4(3));
+fprintf("distance4 (fzero and bisection):%f\n",distance4a);
+fprintf("distance4 (newton and bisection):%f\n",distance4b);
+fprintf("distance4 (secant and bisection):%f\n",distance4c);
